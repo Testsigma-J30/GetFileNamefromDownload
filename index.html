@@ -3,116 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get File From Downloads</title>
+    <title>File Download Demo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            text-align: center;
+            margin-top: 100px;
         }
 
-        input, button {
-            padding: 8px;
-            margin: 5px;
-        }
-
-        #result {
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        table {
-            border-collapse: collapse;
-            margin-top: 20px;
-            width: 600px;
-        }
-
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
+        .download-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-<h2>Downloads Folder</h2>
+    <h1>Download Sample File</h1>
+    <p>Click the button below to download a text file.</p>
 
-<label>File Name (test-data1):</label>
-<input type="text" id="test-data1" placeholder="report.pdf">
+    <button id="downloadButton" class="download-btn">
+        Download File
+    </button>
 
-<button id="searchBtn" onclick="getFilePath()">
-    Get File Path
-</button>
+    <script>
+        document.getElementById('downloadButton').addEventListener('click', () => {
+            const fileContent = `Sample Download File
 
-<div id="result"></div>
+Generated at: ${new Date().toLocaleString()}
 
-<table id="downloadsTable">
-    <thead>
-        <tr>
-            <th>File Name</th>
-            <th>File Path</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>report.pdf</td>
-            <td>C:/Users/TestUser/Downloads/report.pdf</td>
-        </tr>
-        <tr>
-            <td>invoice.xlsx</td>
-            <td>C:/Users/TestUser/Downloads/invoice.xlsx</td>
-        </tr>
-        <tr>
-            <td>sample.zip</td>
-            <td>C:/Users/TestUser/Downloads/sample.zip</td>
-        </tr>
-        <tr>
-            <td>results.csv</td>
-            <td>C:/Users/TestUser/Downloads/results.csv</td>
-        </tr>
-    </tbody>
-</table>
+This file was downloaded from the demo application.
+`;
 
-<script>
-    // Runtime variable: ${test-data}
-    let testData = "";
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
 
-    function getFilePath() {
-        const fileName = document
-            .getElementById("test-data1")
-            .value
-            .trim();
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'sample-file.txt';
 
-        const rows = document.querySelectorAll(
-            "#downloadsTable tbody tr"
-        );
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
-        testData = "";
-
-        rows.forEach(row => {
-            const currentFileName =
-                row.cells[0].textContent.trim();
-
-            if (currentFileName === fileName) {
-                testData =
-                    row.cells[1].textContent.trim();
-            }
+            URL.revokeObjectURL(url);
         });
-
-        const result = document.getElementById("result");
-
-        if (testData) {
-            result.innerHTML =
-                `<b>test-data:</b> ${testData}`;
-        } else {
-            result.innerHTML =
-                `File '${fileName}' not found in Downloads`;
-        }
-
-        // Available globally for automation tools
-        window.testData = testData;
-    }
-</script>
+    </script>
 
 </body>
 </html>
