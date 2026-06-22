@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get File From Downloads</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        input, button {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+            width: 600px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Downloads Folder</h2>
+
+<label>File Name (test-data1):</label>
+<input type="text" id="test-data1" placeholder="report.pdf">
+
+<button id="searchBtn" onclick="getFilePath()">
+    Get File Path
+</button>
+
+<div id="result"></div>
+
+<table id="downloadsTable">
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th>File Path</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>report.pdf</td>
+            <td>C:/Users/TestUser/Downloads/report.pdf</td>
+        </tr>
+        <tr>
+            <td>invoice.xlsx</td>
+            <td>C:/Users/TestUser/Downloads/invoice.xlsx</td>
+        </tr>
+        <tr>
+            <td>sample.zip</td>
+            <td>C:/Users/TestUser/Downloads/sample.zip</td>
+        </tr>
+        <tr>
+            <td>results.csv</td>
+            <td>C:/Users/TestUser/Downloads/results.csv</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    // Runtime variable: ${test-data}
+    let testData = "";
+
+    function getFilePath() {
+        const fileName = document
+            .getElementById("test-data1")
+            .value
+            .trim();
+
+        const rows = document.querySelectorAll(
+            "#downloadsTable tbody tr"
+        );
+
+        testData = "";
+
+        rows.forEach(row => {
+            const currentFileName =
+                row.cells[0].textContent.trim();
+
+            if (currentFileName === fileName) {
+                testData =
+                    row.cells[1].textContent.trim();
+            }
+        });
+
+        const result = document.getElementById("result");
+
+        if (testData) {
+            result.innerHTML =
+                `<b>test-data:</b> ${testData}`;
+        } else {
+            result.innerHTML =
+                `File '${fileName}' not found in Downloads`;
+        }
+
+        // Available globally for automation tools
+        window.testData = testData;
+    }
+</script>
+
+</body>
+</html>
